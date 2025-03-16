@@ -1,3 +1,4 @@
+package TicTacToe;
 import java.util.ArrayList;
 
 public class Board {
@@ -12,20 +13,10 @@ public class Board {
   public String state = "ongoing";
   public boolean[][] winnerCell;
   
-  Board(int size) {
+  public Board(int size) {
     this.size  = size;
     grid       = new int[size][size];
     winnerCell = new boolean[size][size];
-
-    grid[0][0] = X;
-    grid[0][1] = X;
-    grid[0][2] = O;
-
-    grid[1][1] = X;
-
-    grid[2][1] = O;
-    grid[2][2] = O;
-    grid[2][0] = O;
   }
 
   public int[][] validMoves() {

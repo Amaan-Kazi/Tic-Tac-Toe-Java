@@ -70,7 +70,9 @@ public class MainMenu extends JFrame implements ActionListener {
       System.out.println("Button clicked");
     }
     else if (eventSource == PlayerVsPlayerButton) {
-      //
+      PlayerVsPlayer pvp = new PlayerVsPlayer(3);
+      setVisible(false);
+      pvp.setVisible(true);
     }
     else if (eventSource == PlayerVsBotButton) {
       //
