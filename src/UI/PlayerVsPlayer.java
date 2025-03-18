@@ -11,6 +11,10 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
 
   private JButton redo;
   private JButton undo;
+  private JButton reset;
+
+  private Color RED = new Color(244, 67, 54);
+  private Color BLUE = new Color(0, 140, 226);
 
   private Game game = new Game();
   
@@ -35,12 +39,13 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
       for (int j = 0; j < size; j++) {
         grid[i][j] = new JButton(" ");
         Dimension dimension = new Dimension(100, 100);
+        grid[i][j].setBackground(Color.WHITE);
 
         grid[i][j].setPreferredSize(dimension);
         grid[i][j].setMaximumSize(dimension);
         grid[i][j].setMinimumSize(dimension);
         
-        grid[i][j].setFont(new Font("SansSerif", Font.BOLD, 48));
+        grid[i][j].setFont(new Font("SansSerif", Font.BOLD, 64));
         grid[i][j].setFocusPainted(false);
         
         grid[i][j].addActionListener(this);
@@ -58,11 +63,13 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
     turnOf.setFont(new Font("SansSerif", Font.BOLD, 64));
     InfoPanel.add(turnOf);
 
-    JPanel ButtonPanel = new JPanel(new GridLayout(1, 2));
+    JPanel ButtonPanel = new JPanel(new GridLayout(1, 3));
     undo = StyledButton("Undo");
     redo = StyledButton("Redo");
+    reset = StyledButton("Reset");
     ButtonPanel.add(undo);
     ButtonPanel.add(redo);
+    ButtonPanel.add(reset);
     InfoPanel.add(ButtonPanel);
 
     gbc.gridx = 1;
@@ -77,10 +84,42 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
     //
   }
 
+  private void Update() {
+    for (int i = 0; i < game.board.size; i++) {
+      for (int j = 0; j < game.board.size; j++) {
+        String text = " ";
+        boolean isWinningCell = game.board.winnerCell[i][j];
+
+        if (game.board.grid[i][j] == 1) {
+          grid[i][j].setForeground(RED);
+          text = "X";
+          
+          if (isWinningCell) {
+            grid[i][j].setBackground(RED);
+            grid[i][j].setForeground(Color.WHITE);
+          }
+        }
+        else if (game.board.grid[i][j] == 2) {
+          grid[i][j].setForeground(BLUE);
+          text = "O";
+
+          if (isWinningCell) {
+            grid[i][j].setBackground(BLUE);
+            grid[i][j].setForeground(Color.WHITE);
+          }
+        }
+        
+        grid[i][j].setText(text);
+      }
+    }
+
+    turnOf.setText(game.board.xTurn ? "Turn of X" : "Turn of O");
+  }
+
   private JButton StyledButton(String text) {
     JButton button = new JButton(text);
 
-    // button.setFont(buttonFont);
+    button.setFont(new Font("SansSerif", Font.BOLD, 24));
     button.setFocusPainted(false); // Disable Square on focus
     
     button.setBackground(new Color(171, 191, 224));
