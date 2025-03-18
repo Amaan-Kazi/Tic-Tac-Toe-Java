@@ -7,6 +7,11 @@ import java.awt.event.*;
 
 public class PlayerVsPlayer extends JFrame implements ActionListener {
   private JButton[][] grid;
+  private Label turnOf;
+
+  private JButton redo;
+  private JButton undo;
+
   private Game game = new Game();
   
   public PlayerVsPlayer(int size) {
@@ -48,8 +53,17 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
     MainPanel.add(ButtonGrid, gbc);
 
 
-    JPanel InfoPanel = new JPanel(new GridLayout());
-    InfoPanel.add(new Label("X's Turn"));
+    JPanel InfoPanel = new JPanel(new GridLayout(2, 1));
+    turnOf = new Label("Turn of X");
+    turnOf.setFont(new Font("SansSerif", Font.BOLD, 64));
+    InfoPanel.add(turnOf);
+
+    JPanel ButtonPanel = new JPanel(new GridLayout(1, 2));
+    undo = StyledButton("Undo");
+    redo = StyledButton("Redo");
+    ButtonPanel.add(undo);
+    ButtonPanel.add(redo);
+    InfoPanel.add(ButtonPanel);
 
     gbc.gridx = 1;
     MainPanel.add(InfoPanel, gbc);
@@ -61,5 +75,17 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
 
   public void actionPerformed(ActionEvent e) {
     //
+  }
+
+  private JButton StyledButton(String text) {
+    JButton button = new JButton(text);
+
+    // button.setFont(buttonFont);
+    button.setFocusPainted(false); // Disable Square on focus
+    
+    button.setBackground(new Color(171, 191, 224));
+    button.setForeground(Color.WHITE);
+    
+    return button;
   }
 }
