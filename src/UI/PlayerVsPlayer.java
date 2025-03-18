@@ -60,7 +60,8 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
 
     JPanel InfoPanel = new JPanel(new GridLayout(2, 1));
     turnOf = new Label("Turn of X");
-    turnOf.setFont(new Font("SansSerif", Font.BOLD, 64));
+    turnOf.setFont(new Font("SansSerif", Font.BOLD, 52));
+    turnOf.setAlignment(Label.CENTER);
     InfoPanel.add(turnOf);
 
     JPanel ButtonPanel = new JPanel(new GridLayout(1, 3));
@@ -81,7 +82,15 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
   }
 
   public void actionPerformed(ActionEvent e) {
-    //
+    for (int i = 0; i < game.board.size; i++) {
+      for (int  j = 0; j < game.board.size; j++) {
+        if (grid[i][j] == e.getSource()) {
+          game.move(i, j);
+          Update();
+          break;
+        }
+      }
+    }
   }
 
   private void Update() {

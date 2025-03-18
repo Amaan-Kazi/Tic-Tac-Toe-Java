@@ -1,5 +1,6 @@
 package TicTacToe;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Board {
   public static final int EMPTY = 0;
@@ -17,6 +18,18 @@ public class Board {
     this.size  = size;
     grid       = new int[size][size];
     winnerCell = new boolean[size][size];
+  }
+  public Board(Board copyBoard) {
+    size = copyBoard.size;
+    grid = Arrays.copyOf(copyBoard.grid, copyBoard.grid.length);
+    winnerCell = Arrays.copyOf(copyBoard.winnerCell, copyBoard.winnerCell.length);
+  }
+
+  public void move(int row, int col) {
+    if (grid[row][col] != EMPTY) return;
+
+    grid[row][col] = xTurn ? X : O;
+    xTurn = !xTurn;
   }
 
   public int[][] validMoves() {
