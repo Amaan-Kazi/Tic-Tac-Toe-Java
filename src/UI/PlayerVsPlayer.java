@@ -123,6 +123,9 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
     }
 
     turnOf.setText(game.board.xTurn ? "Turn of X" : "Turn of O");
+    if (game.board.state != "ongoing") {
+      turnOf.setText(game.board.state);
+    }
   }
 
   private JButton StyledButton(String text) {
