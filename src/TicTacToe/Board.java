@@ -21,9 +21,23 @@ public class Board {
   }
   public Board(Board copyBoard) {
     size = copyBoard.size;
-    grid = Arrays.copyOf(copyBoard.grid, copyBoard.grid.length);
-    winnerCell = Arrays.copyOf(copyBoard.winnerCell, copyBoard.winnerCell.length);
+
+    // Deep copy for grid
+    grid = new int[size][size];
+    for (int i = 0; i < size; i++) {
+      grid[i] = Arrays.copyOf(copyBoard.grid[i], size);
+    }
+
+    // Deep copy for winnerCell
+    winnerCell = new boolean[size][size];
+    for (int i = 0; i < size; i++) {
+      winnerCell[i] = Arrays.copyOf(copyBoard.winnerCell[i], size);
+    }
+
+    xTurn = copyBoard.xTurn;
+    state = copyBoard.state;
   }
+
 
   public void move(int row, int col) {
     if (state != "ongoing") return;

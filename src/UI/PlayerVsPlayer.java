@@ -66,13 +66,18 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
 
     JPanel ButtonPanel = new JPanel(new GridLayout(1, 3));
     undo = StyledButton("Undo");
-    redo = StyledButton("Redo");
-    reset = StyledButton("Reset");
+    undo.addActionListener(this);
     ButtonPanel.add(undo);
-    ButtonPanel.add(redo);
-    ButtonPanel.add(reset);
-    InfoPanel.add(ButtonPanel);
 
+    redo = StyledButton("Redo");
+    redo.addActionListener(this);
+    ButtonPanel.add(redo);
+
+    reset = StyledButton("Reset");
+    reset.addActionListener(this);
+    ButtonPanel.add(reset);
+
+    InfoPanel.add(ButtonPanel);
     gbc.gridx = 1;
     MainPanel.add(InfoPanel, gbc);
 
@@ -91,6 +96,19 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
         }
       }
     }
+
+    if (e.getSource() == undo) {
+      game.undo();
+      Update();
+    }
+    else if (e.getSource() == redo) {
+      game.redo();
+      Update();
+    }
+    else if (e.getSource() == reset) {
+      game.reset();
+      Update();
+    }
   }
 
   private void Update() {
@@ -98,6 +116,8 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
       for (int j = 0; j < game.board.size; j++) {
         String text = " ";
         boolean isWinningCell = game.board.winnerCell[i][j];
+        
+        grid[i][j].setBackground(Color.WHITE);
 
         if (game.board.grid[i][j] == 1) {
           grid[i][j].setForeground(RED);
