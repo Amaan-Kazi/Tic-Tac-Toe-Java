@@ -39,21 +39,96 @@ public class Board {
   }
 
 
+  public int evaluate(int depth) {
+    if (state.equals("X wins")) {
+      return 10 - depth; // Prefer quicker wins for X
+    }
+    if (state.equals("O wins")) {
+      return depth - 10; // Prefer quicker wins for O
+    }
+    if (state.equals("Draw")) {
+      return 0;
+    }
+
+    int score = 0;
+
+    // Check rows and columns
+    for (int i = 0; i < size; i++) {
+      score += evaluateLine(grid[i]);             // Row
+      score += evaluateLine(getColumn(i));        // Column
+    }
+
+    // Check diagonals
+    score += evaluateLine(getPrimaryDiagonal());     // Top-left to bottom-right
+    score += evaluateLine(getSecondaryDiagonal());   // Top-right to bottom-left
+
+    return score;
+  }
+
+  private int evaluateLine(int[] line) {
+    int xCount = 0;
+    int oCount = 0;
+
+    for (int cell : line) {
+      if (cell == X) xCount++;
+      if (cell == O) oCount++;
+    }
+
+    if (xCount > 0 && oCount > 0) return 0; // Mixed lines have no advantage
+    
+    // Prefer strong threats, prioritize X since it's maximizing
+    if (xCount > 0) return (int) Math.pow(10, xCount); 
+    if (oCount > 0) return -(int) Math.pow(10, oCount); 
+
+    return 0; // Empty line
+  }
+
+  private int[] getColumn(int col) {
+    int[] column = new int[size];
+
+    for (int i = 0; i < size; i++) {
+      column[i] = grid[i][col];
+    }
+
+    return column;
+  }
+
+  private int[] getPrimaryDiagonal() {
+    int[] diagonal = new int[size];
+
+    for (int i = 0; i < size; i++) {
+      diagonal[i] = grid[i][i];
+    }
+
+    return diagonal;
+  }
+
+  private int[] getSecondaryDiagonal() {
+    int[] diagonal = new int[size];
+
+    for (int i = 0; i < size; i++) {
+      diagonal[i] = grid[i][size - 1 - i];
+    }
+
+    return diagonal;
+  }
+
+
   public void move(int row, int col) {
-    if (state != "ongoing") return;
+    if (!state.equals("ongoing")) return;
     if (grid[row][col] != EMPTY) return;
 
     grid[row][col] = xTurn ? X : O;
 
-    boolean horizontal = isHorizontalWin();
-    boolean vertical   = isVerticalWin();
-    boolean diagonal   = isDiagonalWin();
-    boolean draw       = isDraw();
-    
-    if (!(horizontal || vertical || diagonal || draw)) {
+    if (isHorizontalWin() || isVerticalWin() || isDiagonalWin()) {
+      state = xTurn ? "X wins" : "O wins";
+    } else if (isDraw()) {
+      state = "Draw";
+    } else {
       xTurn = !xTurn;
     }
   }
+
 
   public int[][] validMoves() {
     ArrayList<int[]> moves = new ArrayList<>();
@@ -72,7 +147,7 @@ public class Board {
 
 
   public boolean isDraw() {
-    if (state != "ongoing" && state != "Draw") return false;
+    if (!state.equals("ongoing") && state != "Draw") return false;
 
     for (int i = 0; i < size; i++) {
       for (int j = 0; j < size; j++) {

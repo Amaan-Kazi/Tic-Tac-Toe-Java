@@ -16,7 +16,7 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
   private Color RED = new Color(244, 67, 54);
   private Color BLUE = new Color(0, 140, 226);
 
-  private Game game = new Game();
+  private Game game;
   
   public PlayerVsPlayer(int size) {
     setTitle("Tic Tac Toe");
@@ -24,6 +24,7 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setResizable(true);
 
+    game = new Game(size);
 
     // Main Panel
     JPanel MainPanel = new JPanel(new GridBagLayout());
@@ -84,6 +85,9 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
     
     add(MainPanel);
     setVisible(true);
+
+    game.botMove();
+    Update();
   }
 
   public void actionPerformed(ActionEvent e) {
@@ -91,6 +95,7 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
       for (int  j = 0; j < game.board.size; j++) {
         if (grid[i][j] == e.getSource()) {
           game.move(i, j);
+          game.botMove();
           Update();
           break;
         }
@@ -143,7 +148,7 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
     }
 
     turnOf.setText(game.board.xTurn ? "Turn of X" : "Turn of O");
-    if (game.board.state != "ongoing") {
+    if (!game.board.state.equals("ongoing")) {
       turnOf.setText(game.board.state);
     }
   }
