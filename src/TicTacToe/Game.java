@@ -28,7 +28,7 @@ public class Game {
   }
 
 
-  public int minimax(Board b, boolean maximize, int depth, int maxDepth) {
+  public int minimax(Board b, boolean maximize, int alpha, int beta, int depth, int maxDepth) {
     nodes++;
     
     if (depth >= maxDepth || !b.state.equals("ongoing")) {
@@ -36,7 +36,7 @@ public class Game {
     }
     
     if (maximize) {
-      int maximum = Integer.MIN_VALUE;
+      int bestScore = Integer.MIN_VALUE;
 
       for (int i = 0; i < b.size; i++) {
         for (int j = 0; j < b.size; j++) {
@@ -44,16 +44,19 @@ public class Game {
             Board copyBoard = new Board(b);
             copyBoard.move(i, j);
 
-            int moveScore = minimax(copyBoard, !maximize, depth + 1, maxDepth);
-            if (moveScore > maximum) maximum = moveScore;
+            int moveScore = minimax(copyBoard, !maximize, alpha, beta, depth + 1, maxDepth);
+            bestScore = Math.max(moveScore, bestScore);
+
+            alpha = Math.max(alpha, moveScore);
+            if (beta <= alpha) break;
           }
         }
       }
 
-      return maximum;
+      return bestScore;
     }
     else {
-      int minimum = Integer.MAX_VALUE;
+      int bestScore = Integer.MAX_VALUE;
 
       for (int i = 0; i < b.size; i++) {
         for (int j = 0; j < b.size; j++) {
@@ -61,25 +64,29 @@ public class Game {
             Board copyBoard = new Board(b);
             copyBoard.move(i, j);
 
-            int moveScore = minimax(copyBoard, !maximize, depth + 1, maxDepth);
-            if (moveScore < minimum) minimum = moveScore;
+            int moveScore = minimax(copyBoard, !maximize, alpha, beta, depth + 1, maxDepth);
+            bestScore = Math.min(moveScore, bestScore);
+
+            beta = Math.min(beta, moveScore);
+            if (beta <= alpha) break;
           }
         }
       }
 
-      return minimum;
+      return bestScore;
     }
   }
 
   public void botMove() {
     boolean maximize = board.xTurn;
     nodes = 0;
+    int[][] validMoves = board.validMoves();
 
     if (!board.state.equals("ongoing")) return;
-    if (board.validMoves().length == 0)          return;
+    if (validMoves.length == 0)                  return;
 
-    int row = 0;
-    int col = 0;
+    int row = validMoves[0][0];
+    int col = validMoves[0][1];
     int score = maximize ? -5 : 5;
 
     String scores[][] = new String[board.size][board.size];
@@ -91,12 +98,19 @@ public class Game {
       }
     }
 
+    int maxDepth;
+    if      (board.size == 3) maxDepth = 9;
+    else if (board.size == 4) maxDepth = 6;
+    else if (board.size == 5) maxDepth = 4;
+    else                      maxDepth = 2;
+
     for (int i = 0; i < board.size; i++) {
       for (int j = 0; j < board.size; j++) {
         if (board.grid[i][j] == 0) {
           Board copyBoard = new Board(board);
           copyBoard.move(i, j);
-          int moveScore = minimax(copyBoard, !maximize, 0, board.size * board.size);
+          
+          int moveScore = minimax(copyBoard, !maximize, Integer.MIN_VALUE, Integer.MAX_VALUE, 0, maxDepth);
           scores[i][j] = "" + moveScore;
 
           if (maximize) {
