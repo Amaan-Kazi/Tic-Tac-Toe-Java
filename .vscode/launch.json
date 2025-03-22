@@ -1,16 +1,19 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch External Terminal",
+      "name": "Tic Tac Toe",
       "type": "java",
       "request": "launch",
       "mainClass": "Main",
-      "cwd": "${workspaceFolder}/src",
+      "cwd": "${workspaceFolder}\\src",
       "console": "integratedTerminal"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Tic Tac Toe Dual Instance",
+      "configurations": ["Tic Tac Toe", "Tic Tac Toe"]
     }
   ]
 }

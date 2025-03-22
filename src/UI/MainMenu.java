@@ -67,7 +67,9 @@ public class MainMenu extends JFrame implements ActionListener {
     Object eventSource = e.getSource();
     
     if (eventSource == PlayOnlineButton) {
-      System.out.println("Button clicked");
+      PlayOnline po = new PlayOnline(3);
+      setVisible(false);
+      po.setVisible(true);
     }
     else if (eventSource == PlayerVsBotButton) {
       PlayerVsBot pvb = new PlayerVsBot(3);
