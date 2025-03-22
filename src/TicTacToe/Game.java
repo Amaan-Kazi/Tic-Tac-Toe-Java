@@ -15,16 +15,20 @@ public class Game {
     moveNo = 0;
   }
 
-  public void move(int row, int col) {
-    board.move(row, col);
+  public boolean move(int row, int col) {
+    boolean success = board.move(row, col);
 
-    // trim the moves so they can no longer be redone
-    moves = Arrays.copyOf(moves, moveNo + 1);
+    if (success) {
+      // trim the moves so they can no longer be redone
+      moves = Arrays.copyOf(moves, moveNo + 1);
 
-    moves = Arrays.copyOf(moves, moves.length + 1);
-    moves[moves.length - 1] = new Board(board);
+      moves = Arrays.copyOf(moves, moves.length + 1);
+      moves[moves.length - 1] = new Board(board);
 
-    moveNo++;
+      moveNo++;
+    }
+
+    return success;
   }
 
 

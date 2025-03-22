@@ -94,8 +94,9 @@ public class PlayerVsBot extends JFrame implements ActionListener {
     for (int i = 0; i < game.board.size; i++) {
       for (int  j = 0; j < game.board.size; j++) {
         if (grid[i][j] == e.getSource()) {
-          game.move(i, j);
-          game.botMove();
+          boolean success = game.move(i, j);
+          if (success) game.botMove();
+          
           Update();
           break;
         }

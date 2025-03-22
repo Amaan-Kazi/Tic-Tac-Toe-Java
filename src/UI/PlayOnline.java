@@ -10,6 +10,7 @@ import java.net.*;
 public class PlayOnline extends JFrame implements ActionListener {
   private JButton[][] grid;
   private Label turnOf;
+  private int size;
 
   private JPanel MainPanel;
   private JPanel BigPanel;
@@ -34,6 +35,8 @@ public class PlayOnline extends JFrame implements ActionListener {
     setSize(800, 450);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setResizable(true);
+
+    this.size = size;
 
 
     // Main Panel
@@ -140,7 +143,7 @@ public class PlayOnline extends JFrame implements ActionListener {
       revalidate();
       repaint();
       
-      game = new OnlineGame(3, this::Update, "Server", "");
+      game = new OnlineGame(size, this::Update, "Server", "");
     }
     else if (e.getSource() == joinButton) {
       remove(BigPanel);
@@ -149,7 +152,7 @@ public class PlayOnline extends JFrame implements ActionListener {
       revalidate();
       repaint();
       
-      game = new OnlineGame(3, this::Update, "Client", joinIP.getText());
+      game = new OnlineGame(size, this::Update, "Client", joinIP.getText());
     }
 
     for (int i = 0; i < game.board.size; i++) {
@@ -163,15 +166,15 @@ public class PlayOnline extends JFrame implements ActionListener {
     }
 
     if (e.getSource() == undo) {
-      game.undo(1);
+      game.undo(1, game.device);
       Update("");
     }
     else if (e.getSource() == redo) {
-      game.redo(1);
+      game.redo(1, game.device);
       Update("");
     }
     else if (e.getSource() == reset) {
-      game.reset();
+      game.reset(game.device);
       Update("");
     }
   }

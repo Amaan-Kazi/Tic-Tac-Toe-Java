@@ -13,11 +13,15 @@ public class MainMenu extends JFrame implements ActionListener {
   private Font titleFont = new Font("SansSerif", Font.BOLD, 64);
   private Font buttonFont = new Font("SansSerif", Font.BOLD, 32);
 
-  public MainMenu() {
+  private int size;
+
+  public MainMenu(int size) {
     setTitle("Tic Tac Toe");
     setSize(800, 450);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setResizable(true);
+
+    this.size = size;
 
 
     // Main Screen
@@ -67,19 +71,22 @@ public class MainMenu extends JFrame implements ActionListener {
     Object eventSource = e.getSource();
     
     if (eventSource == PlayOnlineButton) {
-      PlayOnline po = new PlayOnline(3);
+      PlayOnline po = new PlayOnline(size);
       setVisible(false);
       po.setVisible(true);
     }
     else if (eventSource == PlayerVsBotButton) {
-      PlayerVsBot pvb = new PlayerVsBot(3);
+      PlayerVsBot pvb = new PlayerVsBot(size);
       setVisible(false);
       pvb.setVisible(true);
     }
     else if (eventSource == PlayerVsPlayerButton) {
-      PlayerVsPlayer pvp = new PlayerVsPlayer(3);
+      PlayerVsPlayer pvp = new PlayerVsPlayer(size);
       setVisible(false);
       pvp.setVisible(true);
+    }
+    else if (eventSource == ExitButton) {
+      System.exit(0);
     }
   }
 

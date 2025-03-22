@@ -114,9 +114,9 @@ public class Board {
   }
 
 
-  public void move(int row, int col) {
-    if (!state.equals("ongoing")) return;
-    if (grid[row][col] != EMPTY) return;
+  public boolean move(int row, int col) {
+    if (!state.equals("ongoing")) return false;
+    if (grid[row][col] != EMPTY) return false;
 
     grid[row][col] = xTurn ? X : O;
 
@@ -127,6 +127,8 @@ public class Board {
     } else {
       xTurn = !xTurn;
     }
+
+    return true;
   }
 
 
