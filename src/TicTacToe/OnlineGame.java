@@ -1,5 +1,6 @@
 package TicTacToe;
 import java.util.Arrays;
+import java.util.function.Consumer;
 
 public class OnlineGame {
   public Board board = new Board(3);
@@ -8,25 +9,48 @@ public class OnlineGame {
 
   public int nodes = 0;
 
-  private String device;
+  public String device;
+  private Server server;
+  private Client client;
 
-  public OnlineGame(int size, String device, String ip) {
+  private Consumer<String> callback;
+
+  public OnlineGame(int size, Consumer<String> callback, String device, String ip) {
     board = new Board(size);
     moves = new Board[1];
     moves[0] = new Board(size);
     moveNo = 0;
 
     this.device = device;
+    this.callback = callback;
 
     if (device.equals("Server")) {
-      Server server = new Server();
+      server = new Server(this::messageRecieved);
     }
     else {
-      Client client = new Client(ip);
+      client = new Client(ip, this::messageRecieved);
     }
   }
 
-  public void move(int row, int col) {
+  public void messageRecieved(String message) {
+    if (message.startsWith("MOVE")) {
+      String[] parts = message.split(" ");
+      if (parts.length != 3) System.out.println(message + " [Invalid number of arguments]");
+
+      try {
+        int row = Integer.parseInt(parts[1]);
+        int col = Integer.parseInt(parts[2]);
+        move(row, col, device.equals("Server") ? "Client" : "Server");
+      }
+      catch (Exception e) {
+        System.out.println("Non numeric move arguments");
+      }
+    }
+  }
+
+  public void move(int row, int col, String movingDevice) {
+    if ( board.xTurn && movingDevice.equals("Client")) return;
+    if (!board.xTurn && movingDevice.equals("Server")) return;
     board.move(row, col);
 
     // trim the moves so they can no longer be redone
@@ -36,6 +60,12 @@ public class OnlineGame {
     moves[moves.length - 1] = new Board(board);
 
     moveNo++;
+    callback.accept("");
+
+    if (device.equals(movingDevice)) {
+      if (device == "Server") server.sendMessage("MOVE " + row + " " + col);
+      else                    client.sendMessage("MOVE " + row + " " + col);
+    }
   }
 
 
@@ -142,7 +172,7 @@ public class OnlineGame {
       }
     }
 
-    move(row, col);
+    move(row, col, device.equals("Server") ? "Client" : "Server");
     System.out.println("Nodes Evaluated: " + nodes);
     nodes = 0;
 

@@ -11,6 +11,9 @@ public class PlayOnline extends JFrame implements ActionListener {
   private JButton[][] grid;
   private Label turnOf;
 
+  private JPanel MainPanel;
+  private JPanel BigPanel;
+
   private JButton redo;
   private JButton undo;
   private JButton reset;
@@ -34,7 +37,7 @@ public class PlayOnline extends JFrame implements ActionListener {
 
 
     // Main Panel
-    JPanel MainPanel = new JPanel(new GridBagLayout());
+    MainPanel = new JPanel(new GridBagLayout());
     MainPanel.setBackground(Color.WHITE);
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.insets = new Insets(0, 20, 0, 20); // Vertical Padding
@@ -102,7 +105,7 @@ public class PlayOnline extends JFrame implements ActionListener {
       host = "Error";
     }
 
-    JPanel bigPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    BigPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
     JPanel PrePanel = new JPanel(new GridLayout(2, 3));
     PrePanel.setSize(new Dimension(600, 200));
@@ -125,23 +128,35 @@ public class PlayOnline extends JFrame implements ActionListener {
     PrePanel.add(joinIP);
     PrePanel.add(joinButton);
 
-    bigPanel.add(PrePanel);
-    add(bigPanel);
+    BigPanel.add(PrePanel);
+    add(BigPanel);
   }
 
   public void actionPerformed(ActionEvent e) {
     if (e.getSource() == hostButton) {
-      game = new OnlineGame(3, "Server", "");
+      remove(BigPanel);
+      add(MainPanel);
+
+      revalidate();
+      repaint();
+      
+      game = new OnlineGame(3, this::Update, "Server", "");
     }
     else if (e.getSource() == joinButton) {
-      game = new OnlineGame(3, "Client", joinIP.getText());
+      remove(BigPanel);
+      add(MainPanel);
+      
+      revalidate();
+      repaint();
+      
+      game = new OnlineGame(3, this::Update, "Client", joinIP.getText());
     }
 
     for (int i = 0; i < game.board.size; i++) {
       for (int  j = 0; j < game.board.size; j++) {
         if (grid[i][j] == e.getSource()) {
-          game.move(i, j);
-          Update();
+          game.move(i, j, game.device);
+          Update("");
           break;
         }
       }
@@ -149,19 +164,19 @@ public class PlayOnline extends JFrame implements ActionListener {
 
     if (e.getSource() == undo) {
       game.undo(1);
-      Update();
+      Update("");
     }
     else if (e.getSource() == redo) {
       game.redo(1);
-      Update();
+      Update("");
     }
     else if (e.getSource() == reset) {
       game.reset();
-      Update();
+      Update("");
     }
   }
 
-  private void Update() {
+  private void Update(String message) {
     for (int i = 0; i < game.board.size; i++) {
       for (int j = 0; j < game.board.size; j++) {
         String text = " ";
