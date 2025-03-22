@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class PlayerVsPlayer extends JFrame implements ActionListener {
+public class PlayerVsBot extends JFrame implements ActionListener {
   private JButton[][] grid;
   private Label turnOf;
 
@@ -18,7 +18,7 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
 
   private Game game;
   
-  public PlayerVsPlayer(int size) {
+  public PlayerVsBot(int size) {
     setTitle("Tic Tac Toe");
     setSize(800, 450);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -85,6 +85,9 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
     
     add(MainPanel);
     setVisible(true);
+
+    game.botMove();
+    Update();
   }
 
   public void actionPerformed(ActionEvent e) {
@@ -92,6 +95,7 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
       for (int  j = 0; j < game.board.size; j++) {
         if (grid[i][j] == e.getSource()) {
           game.move(i, j);
+          game.botMove();
           Update();
           break;
         }
@@ -99,11 +103,11 @@ public class PlayerVsPlayer extends JFrame implements ActionListener {
     }
 
     if (e.getSource() == undo) {
-      game.undo(1);
+      game.undo(2);
       Update();
     }
     else if (e.getSource() == redo) {
-      game.redo(1);
+      game.redo(2);
       Update();
     }
     else if (e.getSource() == reset) {

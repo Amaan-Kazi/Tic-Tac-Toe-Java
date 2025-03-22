@@ -6,8 +6,8 @@ import java.awt.event.*;
 
 public class MainMenu extends JFrame implements ActionListener {
   private JButton PlayOnlineButton;
-  private JButton PlayerVsPlayerButton;
   private JButton PlayerVsBotButton;
+  private JButton PlayerVsPlayerButton;
   private JButton ExitButton;
 
   private Font titleFont = new Font("SansSerif", Font.BOLD, 64);
@@ -41,18 +41,18 @@ public class MainMenu extends JFrame implements ActionListener {
     ButtonPanel.setOpaque(false);
 
     PlayOnlineButton     = StyledButton("Play Online");
-    PlayerVsPlayerButton = StyledButton("Player Vs Player");
     PlayerVsBotButton    = StyledButton("Player Vs Bot");
+    PlayerVsPlayerButton = StyledButton("Player Vs Player");
     ExitButton           = StyledButton("Exit");
 
     PlayOnlineButton.addActionListener(this);
-    PlayerVsPlayerButton.addActionListener(this);
     PlayerVsBotButton.addActionListener(this);
+    PlayerVsPlayerButton.addActionListener(this);
     ExitButton.addActionListener(this);
 
     ButtonPanel.add(PlayOnlineButton);
-    ButtonPanel.add(PlayerVsPlayerButton);
     ButtonPanel.add(PlayerVsBotButton);
+    ButtonPanel.add(PlayerVsPlayerButton);
     ButtonPanel.add(ExitButton);
 
     gbc.gridy = 1; // Move to the next row of the Main Panel
@@ -69,13 +69,15 @@ public class MainMenu extends JFrame implements ActionListener {
     if (eventSource == PlayOnlineButton) {
       System.out.println("Button clicked");
     }
+    else if (eventSource == PlayerVsBotButton) {
+      PlayerVsBot pvb = new PlayerVsBot(3);
+      setVisible(false);
+      pvb.setVisible(true);
+    }
     else if (eventSource == PlayerVsPlayerButton) {
       PlayerVsPlayer pvp = new PlayerVsPlayer(3);
       setVisible(false);
       pvp.setVisible(true);
-    }
-    else if (eventSource == PlayerVsBotButton) {
-      //
     }
   }
 

@@ -147,16 +147,16 @@ public class Game {
   }
 
 
-  public void undo() {
-    if (moveNo > 0) {
-      moveNo--;
+  public void undo(int n) {
+    if (moveNo > n - 1) {
+      moveNo -= n;
       board = new Board(moves[moveNo]);
     }
   }
 
-  public void redo() {
-    if (moves.length > moveNo + 1) {
-      moveNo++;
+  public void redo(int n) {
+    if (moves.length > moveNo + n) {
+      moveNo += n;
       board = new Board(moves[moveNo]);
     }
   }
