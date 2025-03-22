@@ -1,5 +1,5 @@
 package UI;
-import TicTacToe.Game;
+import TicTacToe.OnlineGame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ public class PlayOnline extends JFrame implements ActionListener {
   private Color RED = new Color(244, 67, 54);
   private Color BLUE = new Color(0, 140, 226);
 
-  private Game game;
+  private OnlineGame game;
 
   private JButton hostButton;
   private JButton joinButton;
@@ -32,7 +32,6 @@ public class PlayOnline extends JFrame implements ActionListener {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setResizable(true);
 
-    game = new Game(size);
 
     // Main Panel
     JPanel MainPanel = new JPanel(new GridBagLayout());
@@ -111,10 +110,12 @@ public class PlayOnline extends JFrame implements ActionListener {
     JLabel yourIPLabel = new JLabel("Your IP: ");
     JLabel yourIP = new JLabel(host);
     hostButton = StyledButton("Host  Game");
+    hostButton.addActionListener(this);
 
     JLabel ServerIPLabel = new JLabel("Host IP: ");
     joinIP = new JTextField(12);
     joinButton = StyledButton("Join Game");
+    joinButton.addActionListener(this);
     
     PrePanel.add(yourIPLabel);
     PrePanel.add(yourIP);
@@ -129,6 +130,13 @@ public class PlayOnline extends JFrame implements ActionListener {
   }
 
   public void actionPerformed(ActionEvent e) {
+    if (e.getSource() == hostButton) {
+      game = new OnlineGame(3, "Server", "");
+    }
+    else if (e.getSource() == joinButton) {
+      game = new OnlineGame(3, "Client", joinIP.getText());
+    }
+
     for (int i = 0; i < game.board.size; i++) {
       for (int  j = 0; j < game.board.size; j++) {
         if (grid[i][j] == e.getSource()) {
