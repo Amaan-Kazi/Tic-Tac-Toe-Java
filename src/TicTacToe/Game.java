@@ -7,8 +7,10 @@ public class Game {
   public int moveNo = 0;
 
   public int nodes = 0;
+  public int size;
 
   public Game(int size) {
+    this.size = size;
     board = new Board(size);
     moves = new Board[1];
     moves[0] = new Board(size);
@@ -166,11 +168,11 @@ public class Game {
   }
 
   public void reset() {
-    board = new Board(3);
+    board = new Board(size);
     moves = null;
 
     moves = new Board[1];
-    moves[0] = new Board(3);
+    moves[0] = new Board(size);
 
     moveNo = 0;
   }

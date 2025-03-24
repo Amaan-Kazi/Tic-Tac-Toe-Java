@@ -8,6 +8,7 @@ public class OnlineGame {
   public int moveNo = 0;
 
   public int nodes = 0;
+  public int size;
 
   public String device;
   private Server server;
@@ -16,6 +17,7 @@ public class OnlineGame {
   private Consumer<String> callback;
 
   public OnlineGame(int size, Consumer<String> callback, String device, String ip) {
+    this.size = size;
     board = new Board(size);
     moves = new Board[1];
     moves[0] = new Board(size);
@@ -103,11 +105,11 @@ public class OnlineGame {
   public void reset(String resettingDevice) {
     if (!resettingDevice.equals("Server")) return;
     
-    board = new Board(3);
+    board = new Board(size);
     moves = null;
 
     moves = new Board[1];
-    moves[0] = new Board(3);
+    moves[0] = new Board(size);
 
     moveNo = 0;
 
